@@ -1,21 +1,28 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from "expo-router";
+import { TabBarIcon } from '@/components/TabBarIcon'
+import React from 'react'
+import { useTheme } from '@/hooks/useTheme'
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const theme = useTheme()
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: theme.colors.primary,
         headerShown: false,
+        tabBarStyle: {
+          paddingTop: 8,
+          height: 64,
+          backgroundColor: theme.colors.surface,
+          borderTopWidth: 0
+        },
+        tabBarLabelStyle: {
+          paddingBottom: 8,
+        }
       }}>
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
@@ -24,11 +31,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="cart"
         options={{
-          title: 'Explore',
+          title: 'Cart',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'cart' : 'cart-outline'} color={color} />
           ),
         }}
       />

@@ -1,37 +1,33 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { Stack } from "expo-router";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'jotai';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { SafeAreaView } from 'react-native'
+import { DarkTheme, ThemeProvider } from '@react-navigation/native'
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+const queryClient = new QueryClient()
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#1b1b1b' }}>
+      <Providers>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </Providers>
+    </SafeAreaView>
+  )
+}
+
+function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider value={DarkTheme}>
+      <QueryClientProvider client={queryClient}>
+        <Provider>
+          { children }
+        </Provider>
+      </QueryClientProvider>
     </ThemeProvider>
-  );
+  )
 }
