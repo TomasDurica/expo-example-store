@@ -9,7 +9,7 @@ export default function TabLayout() {
   const theme = useTheme()
 
   return (
-    <Stack screenOptions={{ }}>
+    <Stack>
       <Stack.Screen
         name="index"
         options={{
